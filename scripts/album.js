@@ -28,6 +28,21 @@ var albumMarconi = {
      ]
 };
 
+var albumDMB = {
+     title: 'Busted Stuff',
+     artist: 'Dave Matthews Band',
+     label: 'EM',
+     year: '1997',
+     albumArtUrl: 'assets/images/album_covers/20.png',
+     songs: [
+         { title: 'Busted Stuff', duration: '6:44' },
+         { title: 'Grey Street', duration: '8:07' },
+         { title: 'Where are you going', duration: '4:45'},
+         { title: 'You Never Know', duration: '7:16' },
+         { title: 'Captain', duration: '3:57'}
+     ]
+};
+
 var createSongRow = function(songNumber, songName, songLength) {
     var template =
         '<tr class="album-view-song-item">'
@@ -40,12 +55,14 @@ var createSongRow = function(songNumber, songName, songLength) {
     return template;
 };
 
+var albumTitle = document.getElementsByClassName('album-view-title')[0];
+var albumArtist = document.getElementsByClassName('album-view-artist')[0];
+var albumReleaseInfo = document.getElementsByClassName('album-view-release-info')[0];
+var albumImage = document.getElementsByClassName('album-cover-art')[0];
+var albumSongList = document.getElementsByClassName('album-view-song-list')[0];
+
 var setCurrentAlbum = function(album) {
-    var albumTitle = document.getElementsByClassName('album-view-title')[0];
-    var albumArtist = document.getElementsByClassName('album-view-artist')[0];
-    var albumReleaseInfo = document.getElementsByClassName('album-view-release-info')[0];
-    var albumImage = document.getElementsByClassName('album-cover-art')[0];
-    var albumSongList = document.getElementsByClassName('album-view-song-list')[0];
+    
     
     albumTitle.firstChild.nodeValue = album.title;
     albumArtist.firstChild.nodeValue = album.artist;
@@ -62,19 +79,16 @@ var setCurrentAlbum = function(album) {
 
 window.onload = function () {
     setCurrentAlbum(albumPicasso);
+    
+    var albums = [albumPicasso, albumMarconi, albumDMB];
+    var index = 1;
+    albumImage.addEventListener("click", function(event) {
+        setCurrentAlbum(albums[index]); 
+        index++;
+        if (index === albums.length) {
+            index =0;
+        }
+    });
 };
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+
     
