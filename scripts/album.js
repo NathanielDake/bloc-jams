@@ -36,7 +36,7 @@ var createSongRow = function(songNumber, songName, songLength) {
         '<tr class="album-view-song-item">'
         +'  <td class="song-item-number" data-song-number="' + songNumber + '">' + songNumber + '</td>'
         +'  <td class="song-item-title">' + songName + '</td>'
-        +'  <td class="song-item-duration">' + songLength + '</td>'
+        +'  <td class="song-item-duration">' + filterTimeCode(songLength) + '</td>'
         +'</tr>'
     ;
     
@@ -261,13 +261,39 @@ var previousSong = function() {
     
 };
 
+var setCurrentTimeInPlayerBar= function() {
+    if (currentSoundFile) {
+        currentSoundFile.bind('timeupdate', function(event){
+        var currentTime = currentSoundFile.getTime();
+        $('.current-time').text(filterTimeCode(currentTime));        
+        });
+    }
+};
+
+var setTotalTimeInPlayerBar = function () {
+      if (currentSoundFile) {
+          currentSoundFile.bind('timeupdate', function(event){
+          var totalTime = currentSoundFile.getDuration();
+          $('.total-time').text(filterTimeCode(totalTime));
+          });
+      }  
+};
+
+var filterTimeCode = function(timeInSeconds){
+    var time = Math.floor(parseFloat(timeInSeconds));
+    var minutes = Math.floor(time/60);
+    var seconds = time % 60
+    return minutes + ':'+ seconds;
+};
+
 var updatePlayerBarSong = function() {
-  $('.currently-playing .song-name').text(currentSongFromAlbum.title);  
-  $('.currently-playing .artist-name').text(currentAlbum.artist);
-  $('.currently-playing .artist-song-mobile').text(currentSongFromAlbum.title+" - "+currentAlbum.artist);
     
+    $('.currently-playing .song-name').text(currentSongFromAlbum.title);  
+    $('.currently-playing .artist-name').text(currentAlbum.artist);
+    $('.currently-playing .artist-song-mobile').text(currentSongFromAlbum.title+" - "+currentAlbum.artist);
     $('.main-controls .play-pause').html(playerBarPauseButton);
-    
+    setCurrentTimeInPlayerBar();
+    setTotalTimeInPlayerBar();
 };
 
 
@@ -291,7 +317,6 @@ $(document).ready(function() {
     setupSeekBars();
     $previousButton.click(previousSong);
     $nextButton.click(nextSong);
-    $('.main-controls .play-pause').click(clickHandlerPlayPause);
 });
     
     
